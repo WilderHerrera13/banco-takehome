@@ -7,6 +7,7 @@ import com.bp.shared.exception.InsufficientFundsException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -55,6 +56,12 @@ public class ApiExceptionHandler {
         ex.getBindingResult().getFieldErrors()
                 .forEach(error -> details.put(error.getField(), error.getDefaultMessage()));
         return build(HttpStatus.BAD_REQUEST, "Invalid data", request, details);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> unreadable(HttpMessageNotReadableException ex,
+            HttpServletRequest request) {
+        return build(HttpStatus.BAD_REQUEST, "Malformed request body", request, Map.of());
     }
 
     private ResponseEntity<ErrorResponse> build(HttpStatus status, String message, HttpServletRequest request,

@@ -92,11 +92,20 @@ public class MovementService {
         movement.setMovementType(movementType);
         movement.setAmount(movementType.apply(amount));
         movementRepository.save(movement);
-        recalculateBalance(account);
+        BigDecimal balance = recalculateBalance(account);
+        if (balance.compareTo(BigDecimal.ZERO) < 0) {
+            BigDecimal disponible = balance.subtract(movement.getAmount());
+            LOG.warn("Movement {} update rejected on account {}: balance {} amount {}", id,
+                    account.getAccountNumber(), balance, movement.getAmount());
+            throw new InsufficientFundsException(account.getAccountNumber(), disponible, amount);
+        }
+        eventPublisher.publish(new MovementRegisteredEvent(movement.getId(), account.getClientId(),
+                account.getAccountNumber(), movementType.name(), movement.getAmount(), balance, date, Instant.now()));
+        LOG.info("Movement {} updated on account {}", id, account.getAccountNumber());
         return toDto(movement);
     }
 
-    private void recalculateBalance(Account account) {
+    private BigDecimal recalculateBalance(Account account) {
         BigDecimal balance = account.getInitialBalance();
         for (Movement movement : movementRepository.findByAccountNumberOrderByDateAsc(account.getAccountNumber())) {
             balance = balance.add(movement.getAmount());
@@ -105,6 +114,7 @@ public class MovementService {
         }
         account.setCurrentBalance(balance);
         accountRepository.save(account);
+        return balance;
     }
 
     private MovementDto toDto(Movement movement) {

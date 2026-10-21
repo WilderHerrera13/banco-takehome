@@ -22,7 +22,12 @@ public class ClientEventPublisher {
     }
 
     public void publish(ClientRegisteredEvent evento) {
-        kafkaTemplate.send(topic, evento.clientId(), evento);
+        kafkaTemplate.send(topic, evento.clientId(), evento)
+                .whenComplete((result, error) -> {
+                    if (error != null) {
+                        LOG.error("Event {} could not be published for client {}", topic, evento.clientId(), error);
+                    }
+                });
         LOG.info("Event {} published for client {}", topic, evento.clientId());
     }
 }

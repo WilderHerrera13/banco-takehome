@@ -38,30 +38,41 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Ana Torres\",\n  \"gender\": \"FEMENINO\",\n  \"age\": 29,\n  \"identification\": \"1712345699\",\n  \"address\": \"Calle 100 # 10-20\",\n  \"phone\": \"3112223344\",\n  \"password\": \"clave123\",\n  \"active\": true\n}"
+              "raw": "{\n  \"name\": \"Ana Torres\",\n  \"gender\": \"FEMALE\",\n  \"age\": 29,\n  \"identification\": \"1712345699\",\n  \"address\": \"Calle 100 # 10-20\",\n  \"phone\": \"3112223344\",\n  \"password\": \"clave123\",\n  \"active\": true\n}"
             },
             "url": {
-              "raw": "{{hostMs1}}/clients",
+              "raw": "{{hostMs1}}/clientes",
               "host": [
                 "{{hostMs1}}"
               ],
               "path": [
-                "clients"
+                "clientes"
               ]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201 Created', () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "List clients",
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{hostMs1}}/clients",
+              "raw": "{{hostMs1}}/clientes",
               "host": [
                 "{{hostMs1}}"
               ],
               "path": [
-                "clients"
+                "clientes"
               ]
             }
           }
@@ -71,12 +82,12 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{hostMs1}}/clients/{{clientId}}",
+              "raw": "{{hostMs1}}/clientes/{{clientId}}",
               "host": [
                 "{{hostMs1}}"
               ],
               "path": [
-                "clients",
+                "clientes",
                 "{{clientId}}"
               ]
             }
@@ -94,15 +105,15 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Jose Lema Actualizado\",\n  \"gender\": \"MASCULINO\",\n  \"age\": 36,\n  \"identification\": \"1712345678\",\n  \"address\": \"Sn y principal\",\n  \"phone\": \"098254785\",\n  \"password\": \"1234\",\n  \"active\": true\n}"
+              "raw": "{\n  \"name\": \"Jose Lema Actualizado\",\n  \"gender\": \"MALE\",\n  \"age\": 36,\n  \"identification\": \"1712345678\",\n  \"address\": \"Sn y principal\",\n  \"phone\": \"098254785\",\n  \"password\": \"1234\",\n  \"active\": true\n}"
             },
             "url": {
-              "raw": "{{hostMs1}}/clients/{{clientId}}",
+              "raw": "{{hostMs1}}/clientes/{{clientId}}",
               "host": [
                 "{{hostMs1}}"
               ],
               "path": [
-                "clients",
+                "clientes",
                 "{{clientId}}"
               ]
             }
@@ -113,12 +124,12 @@
           "request": {
             "method": "DELETE",
             "url": {
-              "raw": "{{hostMs1}}/clients/{{clientId}}",
+              "raw": "{{hostMs1}}/clientes/{{clientId}}",
               "host": [
                 "{{hostMs1}}"
               ],
               "path": [
-                "clients",
+                "clientes",
                 "{{clientId}}"
               ]
             }
@@ -141,30 +152,41 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"accountNumber\": \"778899\",\n  \"accountType\": \"SAVINGS\",\n  \"initialBalance\": 1000.00,\n  \"active\": true,\n  \"clientId\": \"{{clientId}}\"\n}"
+              "raw": "{\n  \"accountNumber\": \"900001\",\n  \"accountType\": \"SAVINGS\",\n  \"initialBalance\": 1000.00,\n  \"active\": true,\n  \"clientId\": \"{{clientId}}\"\n}"
             },
             "url": {
-              "raw": "{{hostMs2}}/accounts",
+              "raw": "{{hostMs2}}/cuentas",
               "host": [
                 "{{hostMs2}}"
               ],
               "path": [
-                "accounts"
+                "cuentas"
               ]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201 Created', () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "List accounts de un client",
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{hostMs2}}/accounts?clientId={{clientId}}",
+              "raw": "{{hostMs2}}/cuentas?clientId={{clientId}}",
               "host": [
                 "{{hostMs2}}"
               ],
               "path": [
-                "accounts"
+                "cuentas"
               ],
               "query": [
                 {
@@ -180,12 +202,12 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{hostMs2}}/accounts/{{accountNumber}}",
+              "raw": "{{hostMs2}}/cuentas/{{accountNumber}}",
               "host": [
                 "{{hostMs2}}"
               ],
               "path": [
-                "accounts",
+                "cuentas",
                 "{{accountNumber}}"
               ]
             }
@@ -206,12 +228,12 @@
               "raw": "{\n  \"accountNumber\": \"{{accountNumber}}\",\n  \"accountType\": \"CURRENT\",\n  \"initialBalance\": 100.00,\n  \"active\": true,\n  \"clientId\": \"{{clientId}}\"\n}"
             },
             "url": {
-              "raw": "{{hostMs2}}/accounts/{{accountNumber}}",
+              "raw": "{{hostMs2}}/cuentas/{{accountNumber}}",
               "host": [
                 "{{hostMs2}}"
               ],
               "path": [
-                "accounts",
+                "cuentas",
                 "{{accountNumber}}"
               ]
             }
@@ -232,12 +254,12 @@
               "raw": "{\n  \"date\": \"2022-02-10\",\n  \"movementType\": \"DEPOSIT\",\n  \"amount\": 600.00\n}"
             },
             "url": {
-              "raw": "{{hostMs2}}/movements/{{accountNumber}}",
+              "raw": "{{hostMs2}}/movimientos/{{accountNumber}}",
               "host": [
                 "{{hostMs2}}"
               ],
               "path": [
-                "movements",
+                "movimientos",
                 "{{accountNumber}}"
               ]
             }
@@ -258,12 +280,12 @@
               "raw": "{\n  \"date\": \"2022-02-11\",\n  \"movementType\": \"WITHDRAWAL\",\n  \"amount\": 999999.00\n}"
             },
             "url": {
-              "raw": "{{hostMs2}}/movements/{{accountNumber}}",
+              "raw": "{{hostMs2}}/movimientos/{{accountNumber}}",
               "host": [
                 "{{hostMs2}}"
               ],
               "path": [
-                "movements",
+                "movimientos",
                 "{{accountNumber}}"
               ]
             }
@@ -274,12 +296,12 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{hostMs2}}/movements?accountNumber={{accountNumber}}",
+              "raw": "{{hostMs2}}/movimientos?accountNumber={{accountNumber}}",
               "host": [
                 "{{hostMs2}}"
               ],
               "path": [
-                "movements"
+                "movimientos"
               ],
               "query": [
                 {

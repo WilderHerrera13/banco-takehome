@@ -6,9 +6,11 @@ import com.bp.client.models.Gender;
 import com.bp.client.exception.ClientNotFoundException;
 import com.bp.client.exception.DuplicateIdentificationException;
 import com.bp.client.repository.ClientRepository;
+import com.bp.client.service.ClientDeletedEventPublisher;
 import com.bp.client.service.ClientEventPublisher;
 import com.bp.client.service.ClientService;
 import com.bp.shared.dto.ClientDto;
+import com.bp.shared.event.ClientDeletedEvent;
 import com.bp.shared.event.ClientRegisteredEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -37,11 +39,28 @@ class ClientServiceTest {
     @Mock
     private ClientEventPublisher eventPublisher;
 
+    @Mock
+    private ClientDeletedEventPublisher deletedEventPublisher;
+
     private ClientService clientService;
 
     @BeforeEach
     void setUp() {
-        clientService = new ClientService(clientRepository, eventPublisher, new ClientMapperImpl());
+        clientService = new ClientService(clientRepository, eventPublisher, deletedEventPublisher,
+                new ClientMapperImpl());
+    }
+
+    @Test
+    @DisplayName("deletes the client and publishes the deletion event")
+    void shouldDeleteClientAndPublishDeletionEvent() {
+        when(clientRepository.existsById("cli-1")).thenReturn(true);
+
+        clientService.delete("cli-1");
+
+        verify(clientRepository).deleteById("cli-1");
+        ArgumentCaptor<ClientDeletedEvent> event = ArgumentCaptor.forClass(ClientDeletedEvent.class);
+        verify(deletedEventPublisher).publish(event.capture());
+        assertThat(event.getValue().clientId()).isEqualTo("cli-1");
     }
 
     private ClientDto newClient() {

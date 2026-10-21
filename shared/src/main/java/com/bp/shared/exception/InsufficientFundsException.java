@@ -12,7 +12,7 @@ public class InsufficientFundsException extends RuntimeException {
         super("Saldo no disponible");
         this.accountNumber = accountNumber;
         this.availableBalance = availableBalance;
-        this.requestedAmount = requestedAmount;
+        this.requestedAmount = requestedAmount.abs();
     }
 
     public String getAccountNumber() {

@@ -97,11 +97,12 @@ CREATE TABLE client_projection (
 );
 
 -- Datos de los casos de uso
+-- current_balance = initial_balance + suma de los movimientos de la cuenta.
 INSERT INTO account (account_number, account_type, initial_balance, current_balance, active, client_id)
-VALUES ('478758', 'SAVINGS', 2000.00, 2000.00, TRUE, 'cli-jose-lema'),
-       ('225487', 'CURRENT', 100.00, 100.00, TRUE, 'cli-marianela-montalvo'),
-       ('495878', 'SAVINGS', 0.00, 0.00, TRUE, 'cli-juan-osorio'),
-       ('496825', 'SAVINGS', 540.00, 540.00, TRUE, 'cli-marianela-montalvo'),
+VALUES ('478758', 'SAVINGS', 2000.00, 1425.00, TRUE, 'cli-jose-lema'),
+       ('225487', 'CURRENT', 100.00, 700.00, TRUE, 'cli-marianela-montalvo'),
+       ('495878', 'SAVINGS', 0.00, 150.00, TRUE, 'cli-juan-osorio'),
+       ('496825', 'SAVINGS', 540.00, 0.00, TRUE, 'cli-marianela-montalvo'),
        ('585545', 'CURRENT', 1000.00, 1000.00, TRUE, 'cli-jose-lema');
 
 -- Proyeccion local de clients (evento ya consumido por ms2).
@@ -111,6 +112,7 @@ VALUES ('cli-jose-lema', 'Jose Lema', '1712345678', NOW()),
        ('cli-juan-osorio', 'Juan Osorio', '1712345680', NOW());
 
 -- Movements: 478758 retiro 575, 225487 deposito 600, 495878 deposito 150, 496825 retiro 540
+-- El balance de cada movimiento es el saldo de la cuenta tras aplicar ese movimiento.
 INSERT INTO movement (date, movement_type, amount, balance, account_number)
 VALUES ('2022-02-10', 'WITHDRAWAL', -575.00, 1425.00, '478758'),
        ('2022-02-10', 'DEPOSIT', 600.00, 700.00, '225487'),

@@ -22,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -64,6 +65,25 @@ class MovementServiceTest {
         ArgumentCaptor<MovementRegisteredEvent> event = ArgumentCaptor.forClass(MovementRegisteredEvent.class);
         verify(eventPublisher).publish(event.capture());
         assertThat(event.getValue().balance()).isEqualByComparingTo("700.00");
+    }
+
+    @Test
+    @DisplayName("an update that would leave the balance in negative is rejected")
+    void shouldRejectUpdateThatBreaksTheBalance() {
+        Account account = new Account("496825", AccountType.SAVINGS, new BigDecimal("0.00"), true, "cli-1");
+        Movement movement = new Movement(LocalDate.of(2022, 2, 8), MovementType.WITHDRAWAL, new BigDecimal("-40.00"),
+                new BigDecimal("0.00"), "496825");
+        when(movementRepository.findById(20L)).thenReturn(Optional.of(movement));
+        when(accountRepository.findByAccountNumberForUpdate("496825")).thenReturn(Optional.of(account));
+        when(movementRepository.findByAccountNumberOrderByDateAsc("496825")).thenReturn(List.of(movement));
+        when(movementRepository.save(any(Movement.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        assertThatThrownBy(() -> movementService.update(20L, LocalDate.of(2022, 2, 8), MovementType.WITHDRAWAL,
+                new BigDecimal("500")))
+                .isInstanceOf(InsufficientFundsException.class)
+                .hasMessage("Saldo no disponible");
+
+        verify(eventPublisher, never()).publish(any());
     }
 
     @Test
