@@ -1,0 +1,321 @@
+{
+  "info": {
+    "name": "Banco - API Microservicios",
+    "description": "Coleccion para validar los endpoints de ms1-person-client (8081) y ms2-account-movement (8082).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "hostMs1",
+      "value": "http://localhost:8081"
+    },
+    {
+      "key": "hostMs2",
+      "value": "http://localhost:8082"
+    },
+    {
+      "key": "clientId",
+      "value": "cli-jose-lema"
+    },
+    {
+      "key": "accountNumber",
+      "value": "225487"
+    }
+  ],
+  "item": [
+    {
+      "name": "ms1 - Client",
+      "item": [
+        {
+          "name": "Create client",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ana Torres\",\n  \"gender\": \"FEMENINO\",\n  \"age\": 29,\n  \"identification\": \"1712345699\",\n  \"address\": \"Calle 100 # 10-20\",\n  \"phone\": \"3112223344\",\n  \"password\": \"clave123\",\n  \"active\": true\n}"
+            },
+            "url": {
+              "raw": "{{hostMs1}}/clients",
+              "host": [
+                "{{hostMs1}}"
+              ],
+              "path": [
+                "clients"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List clients",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{hostMs1}}/clients",
+              "host": [
+                "{{hostMs1}}"
+              ],
+              "path": [
+                "clients"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get client",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{hostMs1}}/clients/{{clientId}}",
+              "host": [
+                "{{hostMs1}}"
+              ],
+              "path": [
+                "clients",
+                "{{clientId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update client",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jose Lema Actualizado\",\n  \"gender\": \"MASCULINO\",\n  \"age\": 36,\n  \"identification\": \"1712345678\",\n  \"address\": \"Sn y principal\",\n  \"phone\": \"098254785\",\n  \"password\": \"1234\",\n  \"active\": true\n}"
+            },
+            "url": {
+              "raw": "{{hostMs1}}/clients/{{clientId}}",
+              "host": [
+                "{{hostMs1}}"
+              ],
+              "path": [
+                "clients",
+                "{{clientId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete client",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{hostMs1}}/clients/{{clientId}}",
+              "host": [
+                "{{hostMs1}}"
+              ],
+              "path": [
+                "clients",
+                "{{clientId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ms2 - Account y Movement",
+      "item": [
+        {
+          "name": "Create account",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountNumber\": \"778899\",\n  \"accountType\": \"SAVINGS\",\n  \"initialBalance\": 1000.00,\n  \"active\": true,\n  \"clientId\": \"{{clientId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{hostMs2}}/accounts",
+              "host": [
+                "{{hostMs2}}"
+              ],
+              "path": [
+                "accounts"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List accounts de un client",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{hostMs2}}/accounts?clientId={{clientId}}",
+              "host": [
+                "{{hostMs2}}"
+              ],
+              "path": [
+                "accounts"
+              ],
+              "query": [
+                {
+                  "key": "clientId",
+                  "value": "{{clientId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get account",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{hostMs2}}/accounts/{{accountNumber}}",
+              "host": [
+                "{{hostMs2}}"
+              ],
+              "path": [
+                "accounts",
+                "{{accountNumber}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update account",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountNumber\": \"{{accountNumber}}\",\n  \"accountType\": \"CURRENT\",\n  \"initialBalance\": 100.00,\n  \"active\": true,\n  \"clientId\": \"{{clientId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{hostMs2}}/accounts/{{accountNumber}}",
+              "host": [
+                "{{hostMs2}}"
+              ],
+              "path": [
+                "accounts",
+                "{{accountNumber}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Register deposito",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2022-02-10\",\n  \"movementType\": \"DEPOSIT\",\n  \"amount\": 600.00\n}"
+            },
+            "url": {
+              "raw": "{{hostMs2}}/movements/{{accountNumber}}",
+              "host": [
+                "{{hostMs2}}"
+              ],
+              "path": [
+                "movements",
+                "{{accountNumber}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Register retiro sin balance (espera 422 Balance no disponible)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2022-02-11\",\n  \"movementType\": \"WITHDRAWAL\",\n  \"amount\": 999999.00\n}"
+            },
+            "url": {
+              "raw": "{{hostMs2}}/movements/{{accountNumber}}",
+              "host": [
+                "{{hostMs2}}"
+              ],
+              "path": [
+                "movements",
+                "{{accountNumber}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List movements de una account",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{hostMs2}}/movements?accountNumber={{accountNumber}}",
+              "host": [
+                "{{hostMs2}}"
+              ],
+              "path": [
+                "movements"
+              ],
+              "query": [
+                {
+                  "key": "accountNumber",
+                  "value": "{{accountNumber}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reporte active de account (F4)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{hostMs2}}/reportes?fecha=2022-02-01..2022-02-28&cliente={{clientId}}",
+              "host": [
+                "{{hostMs2}}"
+              ],
+              "path": [
+                "reportes"
+              ],
+              "query": [
+                {
+                  "key": "fecha",
+                  "value": "2022-02-01..2022-02-28"
+                },
+                {
+                  "key": "cliente",
+                  "value": "{{clientId}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
