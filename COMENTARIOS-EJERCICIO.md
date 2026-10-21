@@ -7,8 +7,10 @@ del repositorio antes de enviarlo.
 
 **Solución entregada — Arquitectura de microservicios (Java / Spring Boot)**
 
-Repositorio: https://github.com/<TU-USUARIO>/banco-takehome
+Repositorio: https://github.com/WilderHerrera13/banco-takehome
 ZIP adjunto: `banco-takehome.zip` (descomprimir y `docker compose up --build`).
+
+El pipeline de GitHub Actions corre `mvn -B clean verify` en cada push (10 pruebas).
 
 **Cómo se ejecuta**
 
